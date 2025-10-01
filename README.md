@@ -1,4 +1,2 @@
 
-<p align="cente">
-![phoebe-wuthering-waves](https://github.com/user-attachments/assets/5a020c54-4126-476a-883f-933a8eb8ca07)
-</p>
+<gif align="center" width="100" height="100" src="[https://picsum.photos/100/100](https://tenor.com/en-GB/view/phoebe-wuthering-waves-blonde-hair-cute-anime-gif-17137226678956514112)">
