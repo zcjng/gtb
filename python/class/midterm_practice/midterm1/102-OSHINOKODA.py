@@ -1,31 +1,74 @@
-import sys
-input = sys.stdin.readline
+stars = int(input())
+matrix_size = int(input())
 
-T = int(input())
-N = int(input())
+rows = []
+for i in range(matrix_size):
+    x = [int(x) for x in input().split()]
+    rows.append(x)
 
-row_sum = [0] * N
-col_sum = [0] * N
-diag_main = [0] * (2 * N - 1)   
-diag_anti = [0] * (2 * N - 1)  
+result = []
+for i in range(stars):
+    y = input().split()
+    result.append(y)
 
-matrix = []
-for r in range(N):
-    row = list(map(int, input().split()))
-    matrix.append(row)
-    for c in range(N):
-        val = row[c]
-        row_sum[r] += val
-        col_sum[c] += val
-        diag_main[r - c + N - 1] += val
-        diag_anti[r + c] += val
 
-queries = [tuple(map(int, input().split())) for _ in range(T)]
 
-results = []
-for r, c in queries:
-    val = matrix[r][c]
-    total = row_sum[r] + col_sum[c] + diag_main[r - c + N - 1] + diag_anti[r + c] - 3 * val
-    results.append(total)
+for i in range(stars):
+    r = int(result[i][0])
+    c = int(result[i][1])
+    
+    total_r = 0 #row section
+    total_c = 0 #column sectionn
+    total_cD = 0 #clockwise diagonal
+    total_aD = 0 #anti-clockwise diagonal
+    
+    for i in range(matrix_size):
+        total_r += int(rows[r][i])
+        total_c += int(rows[i][c])
 
-print('\n'.join(map(str, results)))
+    for i in range(-matrix_size, matrix_size):
+        if r + i < 0:
+            continue
+        elif r + i >= 0 and r + i < matrix_size:
+            xcord = r + i
+        elif r + i >= matrix_size:
+            break
+        
+        if c + i < 0:
+            continue
+        elif c + i >= 0 and c + i < matrix_size:
+            ycord = c + i
+        elif c + i >= matrix_size:
+            break
+        
+        try:
+            total_cD += rows[xcord][ycord]
+        except IndexError:
+            continue
+    
+    for i in range(-matrix_size, matrix_size):
+        if r + i < 0:
+            continue
+        elif r + i >= 0 and r + i < matrix_size:
+            xcord = r + i
+        elif r + i >= matrix_size:
+            break
+        
+        if c - i < 0:
+            continue
+        elif c - i >= 0 and c - i < matrix_size:
+            ycord = c - i
+        elif c - i >= matrix_size:
+            continue
+        
+        try:
+            total_aD += rows[xcord][ycord]
+        except IndexError:
+            continue
+        
+        
+    total = total_r + total_c + total_aD + total_cD - (int(rows[r][c]) * 3)
+    print(total)
+
+
+    
