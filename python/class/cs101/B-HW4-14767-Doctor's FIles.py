@@ -1,13 +1,12 @@
 from ast import literal_eval
 
-
 def gen(tree: tuple):
     value, children = tree
     yield value
     for child in children:
         yield from gen(child)
-    
-    
+
+
 genVar = gen(literal_eval(input()))
 while True:
     try:
