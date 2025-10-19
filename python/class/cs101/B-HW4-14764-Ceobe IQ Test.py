@@ -18,7 +18,6 @@ def solve(rows, queens):
     if rows == n:
         return 
     
-
     for c in range(n):
         if c in col or (rows + c) in posDiag or (rows - c) in negDiag:
             continue

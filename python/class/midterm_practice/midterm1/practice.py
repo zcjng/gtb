@@ -1,8 +1,14 @@
-tree = ['lol', 'nooob']
+from ast import literal_eval
 
-placeholder = 'lol'
-
-well = 'yes'
-for i in tree:
-    well += i
-print(well)
+def gen(tree: tuple):
+    parent, children = tree
+    yield parent
+    for child in children:
+        yield from gen(child)
+        
+genVar = gen(literal_eval(input()))
+while True:
+    try:
+        print(next(genVar))
+    except StopIteration:
+        break
