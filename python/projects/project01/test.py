@@ -24,6 +24,8 @@ for filename in os.listdir(source_path):
 
 
 github_token = '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'
-github_token_classic = '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'
+github_token_classic = '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'
 
 ssh-token = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEquf8LvPYsQtAsOx3M0RNsMMP1NAgEr2i6hwtPNlJEL omegathunder564@gmail.com"
+
+
