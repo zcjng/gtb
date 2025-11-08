@@ -8,20 +8,10 @@ class VendingMachine:
         self.items = {} 
         self.balance = balance
         self.initial_balance = balance
-
-    def buy(self, name, quantity):
-        if name in self.items:
-            item = self.items[name]
-            if quantity > item.stock:
-                print('no stock')
-                return
-            
-            item.stock -= quantity
-            self.balance += item.price * quantity
-
     
     def restock(self, name, price, quantity):
         cost = (price * quantity) / 2
+        
         if cost > self.balance:
             print('you dont have money')
             return
@@ -29,15 +19,25 @@ class VendingMachine:
         self.balance -= cost
         if name in self.items:
             item = self.items[name]
-            item.price = price
             item.stock += quantity
+            item.price = price
         else:
-            self.items[name] = self.Item(price, quantity)
-
+            item = self.Item(price, quantity)
+    
+    def buy(self, name, quantity):
+        if name in self.items:
+            item = self.items[name]
+            if quantity > item.stock:
+                print('no stock')
+                return
+    
+            item.stock -= quantity
+            self.balance += item.price * quantity
+            
     def __str__(self):
         profit = self.balance - self.initial_balance
         return f"Profit: {profit}"
-    
+            
     # Continue the class
 
 # ----- input output handler -----

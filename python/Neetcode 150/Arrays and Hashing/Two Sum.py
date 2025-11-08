@@ -10,3 +10,4 @@ for i, n in enumerate(nums):
     difference = target - n
     if difference in indices and indices[difference] != i:
         print([i, indices[difference]])
+

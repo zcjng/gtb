@@ -23,7 +23,7 @@ class PotatosClass:
         self.n = n
         self.m = m
     def record_students(self):
-        for i in range(n*m):
+        for i in range(self.n*self.m):
             name, score, i, j = input().split()
 
             score, i, j = int(score), int(i), int(j)
@@ -40,23 +40,19 @@ class PotatosClass:
         for x in range(width):
             for y in range(width):
                 
-                prevR = i + x
-                prevC = j + y
+                dest[i + y][j + (width - 1 - x)] = self.seats[i + x][j + y]
                 
-                newR = i + y
-                newC = j + (width - 1 - x)
-                
-                dest[newR][newC] = self.seats[prevR][prevC]
-                
-                student = dest[newR][newC]
+                student = dest[i + y][j + (width - 1 - x)]
                 if student:
-                    student.i = newR
-                    student.j = newC
+                    student.i = i + y
+                    student.j = j + (width - 1 - x)
         
         self.seats = dest
 
     def get_best_student(self): # -> Student
         return max(self.students.values(), key=lambda s: s.score)
+    
+        # return reduce(lambda acc, x: acc if acc.score > x.score else x, self.students.values())
 
 
 n, m, k = map(int, input().split())
