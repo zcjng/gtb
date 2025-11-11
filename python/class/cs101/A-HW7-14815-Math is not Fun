@@ -1,0 +1,68 @@
+# TODO: implement generator functions for transformations.
+def double_gen(nums):
+    """Yield each number doubled."""
+    # TODO
+
+    for n in nums:
+        yield (n * 2)
+
+def square_gen(nums):
+    """Yield each number squared."""
+    # TODO
+    for n in nums:
+        yield (n * n)
+
+def odd_gen(nums):
+    """Yield only odd numbers."""
+    # TODO
+
+    for n in nums:
+        if n % 2 == 1:
+            yield n
+
+def even_gen(nums):
+    """Yield only even numbers."""
+    # TODO
+    for n in nums:
+        if n % 2 == 0:
+            yield n
+
+def compose_generators(gens, start_stream):
+    """Chain all generators together in order."""
+    # TODO: apply each generator in sequence to the stream
+    for g in gens:
+        start_stream = g(start_stream)
+    return start_stream
+
+def main():
+    m = int(input())
+    ops = []
+    # Mapping operation names to their generator functions
+    gen_map = {
+        "double": double_gen,
+        "square": square_gen,
+        "odd": odd_gen,
+        "even": even_gen,
+    }
+    for _ in range(m):
+        line = input().split()
+        cmd = line[0]
+        if cmd == "add":
+            keyword = line[1]
+            ops.append(gen_map[keyword])
+            
+        elif cmd == "remove":
+            keyword = line[1]
+            ops.remove(gen_map[keyword])
+        elif cmd == "process":
+            value = int(line[1])
+            value = range(1, value + 1)
+            result = compose_generators(ops, value)
+            
+            for i in result:
+                print(i)
+            
+
+    
+if __name__ == "__main__":
+    main()
