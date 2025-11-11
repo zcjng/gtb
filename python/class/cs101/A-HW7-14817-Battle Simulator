@@ -1,0 +1,87 @@
+class Character:
+    def __init__(self, name, hp, attack, defense):
+        self.name = name
+        self.hp = float(hp)
+        self.attack = float(attack)
+        self.defense = float(defense)
+        self.buff_func = lambda atk, dfs, hp: (atk, dfs, hp)  # identity function
+
+    def apply_buffs(self):
+
+        atk, dfs, hp = self.buff_func(self.attack, self.defense, self.hp)
+        self.attack = float(atk)
+        self.defense = float(dfs)
+        self.hp = float(hp)
+        return (self.attack, self.defense, self.hp)
+  
+    def is_alive(self):
+        return self.hp > 0
+  
+    def take_damage(self, amount):
+        self.hp -= float(amount)
+  
+    def attack_target(self, other):
+        damage = max(1.0, self.attack - other.defense)
+        other.take_damage(damage)
+        return damage
+  
+def compose_buffs(*funcs):
+   
+    if not funcs:
+        return lambda atk, dfs, hp: (atk, dfs, hp)
+    def composed(atk, dfs, hp):
+        cur = (atk, dfs, hp)
+        for f in funcs:
+            cur = f(*cur)
+        return cur
+    return composed
+  
+def buff_factory(cmd, x):
+    
+    if cmd == "atk_add":
+        return lambda atk, dfs, hp: (atk + x, dfs, hp)
+    elif cmd == "atk_mul":
+        return lambda atk, dfs, hp: (atk * x, dfs, hp)
+    elif cmd == "dfs_add":
+        return lambda atk, dfs, hp: (atk, dfs + x, hp)
+    elif cmd == "dfs_mul":
+        return lambda atk, dfs, hp: (atk, dfs * x, hp)
+    else:
+        return lambda atk, dfs, hp: (atk, dfs, hp)
+  
+def battle(c1, c2):
+
+    attacker, defender = c1, c2
+    while True:
+        # apply buffs to both before this attack
+        attacker.apply_buffs()
+        defender.apply_buffs()
+
+        attacker.attack_target(defender)
+        if not defender.is_alive():
+            return attacker.name, attacker.hp
+        # swap roles
+        attacker, defender = defender, attacker
+  
+if __name__ == "__main__":
+    n1, h1, a1, d1 = input().split()
+    n2, h2, a2, d2 = input().split()
+    c1 = Character(n1, float(h1), float(a1), float(d1))
+    c2 = Character(n2, float(h2), float(a2), float(d2))
+  
+    n = int(input())
+    buffs_c1 = []
+    buffs_c2 = []
+    for _ in range(n):
+        target, cmd, val = input().split()
+        buff = buff_factory(cmd, float(val))
+        if target == c1.name:
+            buffs_c1.append(buff)
+        elif target == c2.name:
+            buffs_c2.append(buff)
+  
+    c1.buff_func = compose_buffs(*buffs_c1)
+    c2.buff_func = compose_buffs(*buffs_c2)
+  
+    winner, hp_left = battle(c1, c2)
+    print(f"{winner} wins with {hp_left:.1f} HP left.")
